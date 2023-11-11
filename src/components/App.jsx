@@ -14,12 +14,7 @@ export class App extends Component {
     error: false,
   } 
 
-  // async componentDidMount() { 
-  //   try {
-
-  //   }
-  //  }
-
+ 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query || prevState.page !== this.state.page) {
       
