@@ -40,7 +40,7 @@ export class App extends Component {
 
 
   fetchImages = async () => {
-    const { query, page, images } = this.state;
+    const { query, page } = this.state;
 
     try {
       this.setState({ isLoading: true });
