@@ -1,8 +1,9 @@
 import React, { Component } from "react"; 
+import { fetchBySearch } from "api";
+import { Circles } from "react-loader-spinner";
+
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Button } from "./Button/Button";
-import { fetchBySearch } from "api";
-import { GlobalStyle } from "GlobalStyle";
 import { Searchbar } from "./Searchbar/Searchbar";
 
 export class App extends Component {
@@ -14,14 +15,11 @@ export class App extends Component {
     error: false,
   } 
 
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query || prevState.page !== this.state.page) {
       this.fetchImages();
     }
   }
-
-
 
   handleFormSubmit = newQuery => {
     this.setState({
@@ -61,14 +59,26 @@ export class App extends Component {
   };
 
   render() { 
-    const { images } = this.state;
+    const { images, isLoading } = this.state;
 
     return (
       <>
-        <Searchbar onSubmit={ this.handleFormSubmit} />
-        <ImageGallery items={images } />
+        <Searchbar onSubmit={this.handleFormSubmit} />
+
+        {isLoading && (
+          <Circles
+            height="320"
+            width="320"
+            color="#303f9f"
+            ariaLabel="circles-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        )}
+
+        <ImageGallery items={images} isLoading={isLoading} />
         <Button onClick={ this.handleLoadMore} />
-        {/* <GlobalStyle /> */}
       </>
     );
   }

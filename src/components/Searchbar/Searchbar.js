@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { ImSearch } from "react-icons/im";
 import '../../styles.css';
 
 export class Searchbar extends Component {
@@ -28,15 +29,16 @@ export class Searchbar extends Component {
         return (
         <header className="Searchbar">
             <form className="SearchForm" onSubmit={this.handleSubmit}>
-                <button type="submit" className="SearchForm-button">
-                    <span className="SearchForm-button-label">Search</span>
+                    <button type="submit" className="SearchForm-button">
+                        <ImSearch />
+                    {/* <span className="SearchForm-button-label">Search <TbSearch /></span> */}
                 </button>
 
                 <input
                         className="SearchForm-input"
                         type="text"
-                        autocomplete="off"
-                        autofocus
+                        autoComplete="off"
+                        autoFocus
                         placeholder="Search images and photos"
                         value={query}
                         onChange={ this.handleChange}
