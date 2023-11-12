@@ -25,6 +25,7 @@ export class App extends Component {
   handleFormSubmit = newQuery => {
     this.setState({
       query: newQuery,
+      // query: `${Date.now()}/${newQuery}`,
       page: 1,
       images: [],
     });
