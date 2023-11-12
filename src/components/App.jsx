@@ -12,6 +12,7 @@ export class App extends Component {
     query: "",
     page: 1,
     isLoading: false,
+    loadMore: false,
     error: false,
   } 
 
@@ -37,6 +38,13 @@ export class App extends Component {
     });
   };
 
+  // loadMoreHandler = () => {
+  //   this.setState(prevState =>({
+  //   images: [...prevState.images, ...hits],
+  //   loadMore: this.state.page < Math.ceil(totalHits / 12 )
+  //   }))
+  // }
+
   fetchImages = async () => {
     const { query, page, images } = this.state;
 
@@ -45,9 +53,15 @@ export class App extends Component {
       const imageData = await fetchBySearch({ query, page });
 
       if (imageData !== null) {
-        const newImages = [...images, ...imageData.hits];
+        // const newImages = [...images, ...imageData.hits];
 
-        this.setState({ images: newImages });
+        this.setState(prevState => ({
+          images: [...prevState.images, ...imageData.hits],
+          loadMore: page < Math.ceil(imageData.totalHits /12),
+        }));
+
+
+        // this.setState({ images: newImages });
       }
 
     } catch (error) {
@@ -59,7 +73,7 @@ export class App extends Component {
   };
 
   render() { 
-    const { images, isLoading } = this.state;
+    const { images, page, isLoading, loadMore } = this.state;
 
     return (
       <>
@@ -78,7 +92,7 @@ export class App extends Component {
         )}
 
         <ImageGallery items={images} isLoading={isLoading} />
-        <Button onClick={ this.handleLoadMore} />
+        {images.length > 0 && loadMore && (<Button onClick={this.handleLoadMore} />)}
       </>
     );
   }
