@@ -1,9 +1,9 @@
-import { Component } from "react";
-import { Searchbar } from "./Searchbar/Searchbar";
+import React, { Component } from "react"; 
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Button } from "./Button/Button";
 import { fetchBySearch } from "api";
 import { GlobalStyle } from "GlobalStyle";
+import { Searchbar } from "./Searchbar/Searchbar";
 
 export class App extends Component {
   state = { 
@@ -17,11 +17,18 @@ export class App extends Component {
  
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query || prevState.page !== this.state.page) {
-      
+      const { query, page, images } = this.state;
       try {
         this.setState({ isLoading: true });
-        const initialImages = await fetchBySearch(this.state.query, this.state.page);
-        this.setState({ images: initialImages });
+        const imageData = await fetchBySearch(query, page);
+
+        if (imageData !== null) {
+          const newImages = [...images, ...imageData.hits];
+
+          this.setState({ images: newImages });
+
+        }
+        
       } catch (error) {
         this.setState({ error: true });
       } finally {
@@ -51,8 +58,8 @@ export class App extends Component {
       <>
         <Searchbar onSubmit={ this.handleSubmit} />
         {/* <ImageGallery items={this.images } />
-        <Button onClick={ this.handleLoadMore} /> */}
-        <GlobalStyle />
+        <Button onClick={ this.handleLoadMore} />
+        <GlobalStyle /> */}
       </>
     );
   }

@@ -3,17 +3,17 @@ import axios from "axios";
 
 // axios.defaults.baseURL = 'https://pixabay.com/api/';
 
-export const fetchBySearch = async (searchWord, page = 1) => {
+export const fetchBySearch = async ({ query, page}) => {
     const API_KEY = '39708192-1d0c61ff60ff411770af0a0fc';
     const BASE_URL = 'https://pixabay.com/api/';
 
     const searchParams = new URLSearchParams({
         key: API_KEY,
-        q: searchWord,
+        q: query,
         image_type: "photo",
         orientation: "horizontale",
-        safesearch: true,
-        page: page,
+        // safesearch: true,
+        page,
         per_page: 12,
     });
 
