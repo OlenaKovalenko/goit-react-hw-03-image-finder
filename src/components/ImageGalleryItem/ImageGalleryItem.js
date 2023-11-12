@@ -1,7 +1,9 @@
+import '../../styles.css';
+
 export const ImageGalleryItem = ({ item: { webformatURL } }) => {
     return (
-        <li class="gallery-item">
-            <img src={webformatURL} alt="photo" />
+        <li className="ImageGalleryItem">
+            <img className="ImageGalleryItem-image" src={webformatURL} alt="photo" />
         </li>
     )
 }

@@ -1,4 +1,5 @@
 import { Component } from "react";
+import '../../styles.css';
 
 export class Searchbar extends Component {
    
@@ -6,10 +7,10 @@ export class Searchbar extends Component {
         query: '',
     }
     
-    handleChange = (e) => this.setState({ query: e.target.value });
+    handleChange = event => this.setState({ query: event.currentTarget.value.toLowerCase() });
 
-    handleSubmit = (e) => {
-        e.preventDefault();
+    handleSubmit = event => {
+        event.preventDefault();
         const { query } = this.state;
 
         if (query.trim() === '') {
@@ -18,20 +19,21 @@ export class Searchbar extends Component {
         }
 
         this.props.onSubmit(query);
+        this.setState({ query: '' });
     }
 
     render() { 
         const { query } = this.state;
 
         return (
-        <header className="searchbar">
-            <form className="form" onSubmit={onSubmit}>
-                <button type="submit" className="button">
-                    <span className="button-label">Search</span>
+        <header className="Searchbar">
+            <form className="SearchForm" onSubmit={this.handleSubmit}>
+                <button type="submit" className="SearchForm-button">
+                    <span className="SearchForm-button-label">Search</span>
                 </button>
 
                 <input
-                        className="input"
+                        className="SearchForm-input"
                         type="text"
                         autocomplete="off"
                         autofocus

@@ -14,30 +14,16 @@ export class App extends Component {
     error: false,
   } 
 
- 
-  async componentDidUpdate(prevProps, prevState) {
+
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query || prevState.page !== this.state.page) {
-      const { query, page, images } = this.state;
-      try {
-        this.setState({ isLoading: true });
-        const imageData = await fetchBySearch(query, page);
-
-        if (imageData !== null) {
-          const newImages = [...images, ...imageData.hits];
-
-          this.setState({ images: newImages });
-
-        }
-        
-      } catch (error) {
-        this.setState({ error: true });
-      } finally {
-        this.setState({ isLoading: false });
-      }
+      this.fetchImages();
     }
   }
 
-  handleSubmit = (newQuery) => {
+
+
+  handleFormSubmit = newQuery => {
     this.setState({
       query: newQuery,
       page: 1,
@@ -53,13 +39,36 @@ export class App extends Component {
     });
   };
 
+  fetchImages = async () => {
+    const { query, page, images } = this.state;
+
+    try {
+      this.setState({ isLoading: true });
+      const imageData = await fetchBySearch({ query, page });
+
+      if (imageData !== null) {
+        const newImages = [...images, ...imageData.hits];
+
+        this.setState({ images: newImages });
+      }
+
+    } catch (error) {
+      this.setState({ error: true });
+
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
+
   render() { 
+    const { images } = this.state;
+
     return (
       <>
-        <Searchbar onSubmit={ this.handleSubmit} />
-        {/* <ImageGallery items={this.images } />
+        <Searchbar onSubmit={ this.handleFormSubmit} />
+        <ImageGallery items={images } />
         <Button onClick={ this.handleLoadMore} />
-        <GlobalStyle /> */}
+        {/* <GlobalStyle /> */}
       </>
     );
   }

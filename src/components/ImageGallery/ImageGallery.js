@@ -1,8 +1,9 @@
+import '../../styles.css';
 import { ImageGalleryItem } from "components/ImageGalleryItem/ImageGalleryItem";
 
 export const ImageGallery = ({ items }) => {
     return (
-        <ul>
+        <ul className='ImageGallery'>
             {items.map(item => (
                 <ImageGalleryItem key={item.id} item={item} />
             ))}
