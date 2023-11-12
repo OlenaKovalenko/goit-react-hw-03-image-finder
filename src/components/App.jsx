@@ -1,18 +1,22 @@
 import React, { Component } from "react"; 
 import { fetchBySearch } from "api";
-import { Circles } from "react-loader-spinner";
+import toast, { Toaster } from 'react-hot-toast';
 
+import { Circles } from "react-loader-spinner";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Button } from "./Button/Button";
 import { Searchbar } from "./Searchbar/Searchbar";
+import { Modal } from "./Modal/Modal";
 
 export class App extends Component {
   state = { 
     images: [],
     query: "",
     page: 1,
+    largeImageURL: "",
     isLoading: false,
     loadMore: false,
+    isShowModal: false,
     error: false,
   } 
 
@@ -39,12 +43,28 @@ export class App extends Component {
     });
   };
 
+  handleImageClick = image => {
+    this.setState({
+      isShowModal: true,
+      largeImageURL: image.largeImageURL,
+    });
+  };
+
+  handleModalClose = () => {
+    this.setState({
+      isShowModal: false,
+      largeImageURL: "",
+    });
+  };
 
   fetchImages = async () => {
     const { query, page } = this.state;
 
     try {
-      this.setState({ isLoading: true });
+      this.setState({
+        isLoading: true,
+        error: false,
+      });
       const imageData = await fetchBySearch({ query, page });
 
       if (imageData !== null) {
@@ -57,6 +77,7 @@ export class App extends Component {
 
     } catch (error) {
       this.setState({ error: true });
+      toast.error('Oops! Something went wrong! Please try reloading this page!');
 
     } finally {
       this.setState({ isLoading: false });
@@ -64,7 +85,7 @@ export class App extends Component {
   };
 
   render() { 
-    const { images, isLoading, loadMore } = this.state;
+    const { images, isLoading, loadMore, largeImageURL, isShowModal, error } = this.state;
 
     return (
       <>
@@ -82,8 +103,14 @@ export class App extends Component {
           />
         )}
 
-        <ImageGallery items={images} isLoading={isLoading} />
+        <ImageGallery items={images} isLoading={isLoading} onImageClick={ this.handleImageClick} />
+
         {images.length > 0 && loadMore && (<Button onClick={this.handleLoadMore} />)}
+
+        {isShowModal && (<Modal largeImageURL={largeImageURL} onClose={this.handleModalClose} />)}
+
+        <Toaster />
+
       </>
     );
   }
