@@ -28,8 +28,7 @@ export class App extends Component {
 
   handleFormSubmit = newQuery => {
     this.setState({
-      query: newQuery,
-      // query: `${Date.now()}/${newQuery}`,
+      query: `${Date.now()}/${newQuery}`,
       page: 1,
       images: [],
     });
@@ -59,13 +58,14 @@ export class App extends Component {
 
   fetchImages = async () => {
     const { query, page } = this.state;
+    const newQueryPart = query.split('/').pop();
 
     try {
       this.setState({
         isLoading: true,
         error: false,
       });
-      const imageData = await fetchBySearch({ query, page });
+      const imageData = await fetchBySearch({ newQueryPart, page });
 
       if (imageData !== null) {
 
